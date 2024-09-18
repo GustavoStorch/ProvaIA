@@ -28,13 +28,25 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
             display: flex;
             flex-direction: column;
-            height: 500px; /* Altura fixa para o contêiner do chat */
+            height: 550px; /* Altura ajustada para o contêiner do chat com o cabeçalho */
+        }
+
+        /* Estilos para o cabeçalho do chat */
+        #chat-header {
+            background-color: #00796b; /* Fundo verde */
+            color: white; /* Cor do texto */
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
         }
 
         /* Estilos para a caixa de mensagens */
         #chat-box {
             padding: 20px;
-            height: calc(100% - 60px); /* Altura ajustada para ocupar o espaço disponível */
+            height: calc(100% - 100px); /* Altura ajustada para ocupar o espaço disponível com o cabeçalho */
             overflow-y: auto; /* Rolagem vertical se necessário */
             border-bottom: 1px solid #ddd; /* Linha de separação inferior */
             background-color: #fafafa; /* Fundo cinza claro */
@@ -116,6 +128,8 @@
 <body>
     <!-- Contêiner principal do chat -->
     <div id="chat-container">
+        <!-- Cabeçalho do chat -->
+        <div id="chat-header">Chat de Assistência para Plantas 🌱</div>
         <!-- Caixa onde as mensagens serão exibidas -->
         <div id="chat-box"></div>
         <!-- Contêiner para o campo de entrada e o botão de enviar -->
