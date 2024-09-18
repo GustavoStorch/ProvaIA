@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css"> <!-- Link para o arquivo CSS externo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Link para a biblioteca Font Awesome para ícones -->
+    <title>Chat de Assistência para Plantas</title>
+    <style>
+        /* Estilos gerais para o corpo da página */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte da página */
+            background: linear-gradient(135deg, #083b6b, #a32424); /* Gradiente de fundo */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Altura da página ocupando toda a altura da visualização */
+        }
+
+        /* Estilos para o contêiner do chat */
+        #chat-container {
+            width: 90%;
+            max-width: 600px;
+            background: #ffffff; /* Fundo branco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            display: flex;
+            flex-direction: column;
+            height: 500px; /* Altura fixa para o contêiner do chat */
+        }
+
+        /* Estilos para a caixa de mensagens */
+        #chat-box {
+            padding: 20px;
+            height: calc(100% - 60px); /* Altura ajustada para ocupar o espaço disponível */
+            overflow-y: auto; /* Rolagem vertical se necessário */
+            border-bottom: 1px solid #ddd; /* Linha de separação inferior */
+            background-color: #fafafa; /* Fundo cinza claro */
+        }
+
+        /* Estilos para as mensagens do usuário e assistente */
+        #chat-box .Usuário, #chat-box .Assistente {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word; /* Quebra de linha em palavras longas */
+            display: flex;
+            align-items: center;
+        }
+
+        /* Estilos específicos para mensagens do usuário */
+        #chat-box .Usuário {
+            background-color: #d0f0c0; /* Fundo verde claro */
+            align-self: flex-end; /* Alinhamento à direita */
+            margin-left: auto; /* Garante que a mensagem fique à direita */
+        }
+
+        /* Estilos específicos para mensagens do assistente */
+        #chat-box .Assistente {
+            background-color: #e8eaf6; /* Fundo azul claro */
+        }
+
+        /* Espaçamento para elementos de mensagem */
+        #chat-box b {
+            margin-right: 10px; /* Espaçamento entre o nome e a mensagem */
+        }
+
+        #chat-box i {
+            margin-right: 10px; /* Espaçamento entre o ícone e o nome */
+        }
+
+        /* Estilos para o contêiner de entrada de mensagem */
+        #input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        /* Estilos para o campo de entrada de mensagem */
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        /* Estilos para o botão de enviar */
+        button {
+            width: 100px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00796b; /* Cor de fundo do botão */
+            color: white; /* Cor do texto do botão */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Transição suave para mudança de cor */
+        }
+
+        /* Estilos para o botão de enviar ao passar o mouse */
+        button:hover {
+            background-color: #004d40; /* Cor de fundo mais escura */
+        }
+
+        /* Estilos para o botão de enviar quando em foco */
+        button:focus {
+            outline: none; /* Remove o contorno padrão do botão */
+        }
+    </style>
+</head>
+<body>
+    <!-- Contêiner principal do chat -->
+    <div id="chat-container">
+        <!-- Caixa onde as mensagens serão exibidas -->
+        <div id="chat-box"></div>
+        <!-- Contêiner para o campo de entrada e o botão de enviar -->
+        <div id="input-container">
+            <input type="text" id="message-input" placeholder="Digite sua mensagem"> <!-- Campo de entrada de mensagem -->
+            <button onclick="sendMessage()">Enviar</button> <!-- Botão de enviar -->
+        </div>
+    </div>
+
+    <script>
+        // Variáveis para controlar o estado do chat
+        let hasStarted = false;
+        let awaitingFirstMessage = true;
+
+        /**
+         * Adiciona uma mensagem ao chat.
+         * @param {string} message - A mensagem a ser exibida.
+         * @param {string} sender - O remetente da mensagem (Usuário ou Assistente).
+         */
+        function addMessage(message, sender) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElem = document.createElement('div');
+            messageElem.className = sender;
+            
+            // Define o ícone com base no remetente
+            let icon = '';
+            if (sender === 'Usuário') {
+                icon = '<i class="fas fa-user"></i>'; // Ícone de usuário
+            } else if (sender === 'Assistente') {
+                icon = '<i class="fas fa-robot"></i>'; // Ícone de robô
+            }
+
+            // Define o conteúdo da mensagem
+            messageElem.innerHTML = `${icon} <b>${sender}:</b> ${message}`;
+            chatBox.appendChild(messageElem); // Adiciona a mensagem ao chat
+            chatBox.scrollTop = chatBox.scrollHeight; // Faz o scroll para a última mensagem
+        }
+
+        /**
+         * Envia uma mensagem para o servidor e adiciona a resposta ao chat.
+         */
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const userMessage = messageInput.value;
+
+            if (userMessage) {
+                addMessage(userMessage, 'Usuário'); // Adiciona a mensagem do usuário ao chat
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userMessage }), // Envia a mensagem para o servidor
+                })
+                .then(response => response.json())
+                .then(data => {
+                    addMessage(data.response, 'Assistente'); // Adiciona a resposta do assistente ao chat
+                    if (awaitingFirstMessage) {
+                        awaitingFirstMessage = false;
+                        sendMessage(); // Envia a próxima mensagem após a inicial
+                    }
+                });
+                messageInput.value = ''; // Limpa o campo de entrada
+            }
+        }
+
+        /**
+         * Carrega a mensagem inicial quando a página é carregada.
+         */
+        function loadInitialMessages() {
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: "Iniciar" }), // Envia a mensagem inicial para o servidor
+            })
+            .then(response => response.json())
+            .then(data => {
+                addMessage(data.response, 'Assistente'); // Adiciona a resposta inicial do assistente ao chat
+                awaitingFirstMessage = false;
+            });
+        }
+
+        // Envia a mensagem ao pressionar a tecla Enter
+        document.getElementById('message-input').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage(); // Envia a mensagem ao pressionar Enter
+            }
+        });
+
+        // Carrega as mensagens iniciais quando a página é carregada
+        window.onload = loadInitialMessages;
+    </script>
+</body>
+</html>
