@@ -159,7 +159,7 @@
          */
         function sendMessage() {
             const messageInput = document.getElementById('message-input');
-            const userMessage = messageInput.value;
+            const userMessage = messageInput.value.trim().toLowerCase();
 
             if (userMessage) {
                 addMessage(userMessage, 'Usuário'); // Adiciona a mensagem do usuário ao chat
