@@ -11,17 +11,13 @@ agente_decisor = AgenteDecisor()  # Agente responsável por processar dados e fo
 
 @app.route('/')
 def index():
-    """
-    Rota para a página inicial. Renderiza o template 'index.html'.
-    """
+    # Rota para a página inicial. Renderiza o template 'index.html'.
     return render_template('index.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    """
-    Rota para receber e processar mensagens do chat.
-    Aceita solicitações POST contendo mensagens do usuário.
-    """
+    # Rota para receber e processar mensagens do chat.
+    # Aceita solicitações POST contendo mensagens do usuário.
     # Obtém os dados JSON da solicitação
     data = request.get_json()
     user_message = data.get('message')  # Extrai a mensagem do usuário do JSON

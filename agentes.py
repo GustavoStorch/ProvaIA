@@ -6,10 +6,8 @@ class AgenteColetor:
         self.dados = {}  # Dicionário para armazenar os dados coletados
 
     def coletar_dados(self, mensagem):
-        """
-        Coleta dados com base na mensagem recebida e armazena no dicionário de dados.
-        Também reconhece saudações e responde apropriadamente.
-        """
+        # Coleta dados com base na mensagem recebida e armazena no dicionário de dados.
+        # Também reconhece saudações e responde apropriadamente.
         # Verifica se a mensagem é uma saudação
         saudacoes = {
             "oi": "Olá! Como posso ajudar?",
@@ -75,16 +73,12 @@ class AgenteColetor:
             return self.finalizar_coleta()
         
     def finalizar_coleta(self):
-        """
-        Finaliza a coleta de dados, processa os dados e limpa as entradas.
-        """
+        # Finaliza a coleta de dados, processa os dados e limpa as entradas.
         # Aqui você pode chamar o AgenteDecisor para processar os dados, se necessário
         return "Vamos começar novamente.\n", self.resetar_coleta()
 
     def resetar_coleta(self):
-        """
-        Limpa o dicionário de dados para reiniciar a coleta de informações.
-        """
+        # Limpa o dicionário de dados para reiniciar a coleta de informações.
         self.dados.clear()  # Limpa o dicionário de dados para começar novamente
         return "Por favor, informe a temperatura ambiente (°C):"
 
@@ -97,8 +91,6 @@ class AgenteDecisor:
         pass
 
     def processar_dados(self, dados):
-        """
-        Processa os dados coletados e gera recomendações usando o SistemaRegras.
-        """
+        # Processa os dados coletados e gera recomendações usando o SistemaRegras.
         sistema = SistemaRegras(dados['temperatura'], dados['umidade'], dados['tipo_solo'], dados['tipo_planta'])
         return sistema.gerar_recomendacao()  # Retorna as recomendações geradas pelo sistema
