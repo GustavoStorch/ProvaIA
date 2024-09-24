@@ -49,7 +49,22 @@ class AgenteColetor:
                 return "Tipo de solo inválido ou não está na base de dados. Por favor, escolha entre: " + ", ".join(tipos_solo_validos) + "."
         elif 'tipo_planta' not in self.dados:
             # Valida o tipo de planta
-            tipos_planta_validos = ['cacto', 'suculenta', 'orquidea', 'planta carnívora', 'violeta', 'samambaia', 'gerânio']  # Adicione mais tipos se necessário
+            # tipos_planta_validos = ['cacto', 'suculenta', 'orquidea', 'planta carnívora', 'violeta', 'samambaia', 'gerânio']  # Adicione mais tipos se necessário
+            tipos_planta_validos = [
+                'cacto', 'suculenta', 'orquidea', 'planta carnívora', 'violeta', 'samambaia', 'gerânio',  # Tipos originais
+                # Plantas de Interior
+                'pothos', 'ficus', 'lírio da paz',
+                # Plantas de Exterior
+                'rosa', 'hortênsia', 'lavanda', 'bromélia', 'azaleia',
+                # Plantas Ornamentais
+                'orquídea', 'palmeira', 'suculentas', 'cipreste', 'árvore da felicidade',
+                # Plantas Medicinais
+                'aloe vera', 'camomila', 'erva-cidreira', 'hortelã', 'gengibre',
+                # Plantas Frutíferas
+                'laranja', 'maçã', 'banana', 'abacate', 'manga',
+                # Plantas Leguminosas
+                'feijão', 'ervilha', 'lentilha', 'grão-de-bico', 'soja'
+            ]
             if mensagem.lower() in tipos_planta_validos:
                 self.dados['tipo_planta'] = mensagem
                 return "Obrigado! Agora estou processando suas informações."
